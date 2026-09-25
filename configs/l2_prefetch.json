@@ -1,0 +1,14 @@
+[
+  {
+    "executable_name": "champsim_l2_no",
+    "L2C": {
+      "prefetcher": "no"
+    }
+  },
+  {
+    "executable_name": "champsim_l2_next_line",
+    "L2C": {
+      "prefetcher": "next_line"
+    }
+  }
+]
