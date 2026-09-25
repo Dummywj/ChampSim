@@ -407,6 +407,27 @@ class NormalizeConfigTest(unittest.TestCase):
         result = config.parse.NormalizedConfiguration(test_config)
         self.assertEqual(result.pmem.get('__test__'), True)
 
+    def test_physical_memory_normalization_preserves_input(self):
+        for key in ('data_rate', 'frequency'):
+            with self.subTest(key=key):
+                test_config = {'physical_memory': {key: 3200}}
+
+                result = config.parse.NormalizedConfiguration(test_config)
+
+                self.assertEqual(result.pmem['data_rate'], 3200)
+                self.assertEqual(result.pmem['frequency'], 1600)
+                self.assertEqual(test_config, {'physical_memory': {key: 3200}})
+
+    def test_repeated_physical_memory_normalization_is_stable(self):
+        for key in ('data_rate', 'frequency'):
+            with self.subTest(key=key):
+                test_config = {'physical_memory': {key: 3200}}
+                results = [config.parse.NormalizedConfiguration(test_config) for _ in range(3)]
+
+                for result in results:
+                    self.assertEqual(result.pmem['data_rate'], 3200)
+                    self.assertEqual(result.pmem['frequency'], 1600)
+
     def test_virtual_memory_is_forwarded(self):
         test_config = {
                 'virtual_memory': {
